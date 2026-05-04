@@ -5,4 +5,11 @@ For Desktop development, run:
 
 
 
-  
+
+  - Why does each document have "+page.svelte" instead of just "page.svelte"?
+  - Where do I really edit code?
+  - I don't know Rust...
+  -   What does this do?    // CPU Usage: average across all logical cores
+        let cpu_usage = sys.cpus().iter().map(|c| c.cpu_usage()).sum::<f32>() 
+        / sys.cpus().len() as f32;
+        // i might actually not want this
