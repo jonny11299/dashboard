@@ -1,0 +1,13 @@
+# macOS
+.DS_Store
+
+# Dependencies
+node_modules/
+
+# Generated / build output
+.svelte-kit/
+src-tauri/target/
+
+# Environment
+env/
+.env

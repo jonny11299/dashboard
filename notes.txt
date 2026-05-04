@@ -1,0 +1,8 @@
+
+
+For Desktop development, run:
+  npm run tauri dev
+
+
+
+  
