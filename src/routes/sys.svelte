@@ -2,6 +2,11 @@
     import { onMount, onDestroy } from "svelte";
     import { getSystemStats, type SystemStats } from "$lib/systemStats";
 
+    import { invoke } from "@tauri-apps/api/core";
+
+    // if this is expanded or minimized
+    let expanded = $state(true);
+
     let stats = $state<SystemStats | null>(null);
     let interval: ReturnType<typeof setInterval>;
 
@@ -39,6 +44,11 @@
         });
 
         interval = setInterval(async () => {
+            // use this to verify (via console) that you're actually using the correct PECI CPU in lib.rs
+            // (we are).
+            // const components = await invoke<string[]>("list_components");
+            // console.log(components);
+
             stats = await getSystemStats();
             numQueries++;
             const i = numQueries % bufferSize;
@@ -77,96 +87,166 @@
     onDestroy(() => clearInterval(interval));
 </script>
 
-{#if stats}
-    {@const avg = (key: keyof SystemStats) =>
-        statsBuffer.reduce((sum, s) => sum + (s[key] as number), 0) /
-        statsBuffer.length}
+<div class="panel">
+    <button class="banner" onclick={() => (expanded = !expanded)}>
+        <span>System Stats</span>
+        <span class="arrow">{expanded ? "▲" : "▼"}</span>
+    </button>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Stat</th>
-                <th>Current</th>
-                <th>Avg</th>
-                <th>Min</th>
-                <th>Max</th>
-                <th>Full?</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>CPU %</td>
-                <td>{stats.cpu_usage_percent.toFixed(1)}%</td>
-                <td>{avg("cpu_usage_percent").toFixed(1)}%</td>
-                <td>{statsMin.cpu_usage_percent.toFixed(1)}%</td>
-                <td>{statsMax.cpu_usage_percent.toFixed(1)}%</td>
-                <td>
-                    <span class="tooltip"
-                        >📊
-                        <span class="popup"
-                            >{statsBuffer
-                                .map(
-                                    (s) => s.cpu_usage_percent.toFixed(1) + "%",
-                                )
-                                .join(", ")}</span
+    <div class="panel-content" class:hidden={!expanded}>
+        {#if stats}
+            {@const avg = (key: keyof SystemStats) =>
+                statsBuffer.reduce((sum, s) => sum + (s[key] as number), 0) /
+                statsBuffer.length}
+
+            <p>
+                {numQueries}
+                {numQueries === 1 ? "sample" : "samples"} / {bufferSize} buffer.
+            </p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Stat</th>
+                        <th>Current</th>
+                        <th>Avg</th>
+                        <th>Min</th>
+                        <th>Max</th>
+                        <th>Full?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>CPU %</td>
+                        <td>{stats.cpu_usage_percent.toFixed(1)}%</td>
+                        <td>{avg("cpu_usage_percent").toFixed(1)}%</td>
+                        <td>{statsMin.cpu_usage_percent.toFixed(1)}%</td>
+                        <td>{statsMax.cpu_usage_percent.toFixed(1)}%</td>
+                        <td>
+                            <span class="tooltip"
+                                >📊
+                                <span class="popup">
+                                    {#each statsBuffer as s, idx}
+                                        <span
+                                            class:current={idx ===
+                                                numQueries % bufferSize}
+                                            >{s.cpu_usage_percent.toFixed(
+                                                1,
+                                            )}%</span
+                                        >{#if idx < statsBuffer.length - 1}{" | "}
+                                        {/if}
+                                    {/each}
+                                </span>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>RAM (MB)</td>
+                        <td>{stats.ram_used_mb} / {stats.ram_total_mb}</td>
+                        <td>{avg("ram_used_mb").toFixed(0)}</td>
+                        <td>{statsMin.ram_used_mb}</td>
+                        <td>{statsMax.ram_used_mb}</td>
+                        <td>
+                            <span class="tooltip"
+                                >📊
+                                <span class="popup">
+                                    {#each statsBuffer as s, idx}
+                                        <span
+                                            class:current={idx ===
+                                                numQueries % bufferSize}
+                                            >{s.ram_used_mb.toFixed(1)}MB</span
+                                        >{#if idx < statsBuffer.length - 1}{" | "}
+                                        {/if}
+                                    {/each}
+                                </span>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Temp °C</td>
+                        <td>{stats.cpu_temp_celsius?.toFixed(1) ?? "N/A"}</td>
+                        <td
+                            >{statsBuffer.some(
+                                (s) => s.cpu_temp_celsius != null,
+                            )
+                                ? avg("cpu_temp_celsius").toFixed(1)
+                                : "N/A"}</td
                         >
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td>RAM (MB)</td>
-                <td>{stats.ram_used_mb} / {stats.ram_total_mb}</td>
-                <td>{avg("ram_used_mb").toFixed(0)}</td>
-                <td>{statsMin.ram_used_mb}</td>
-                <td>{statsMax.ram_used_mb}</td>
-                <td>
-                    <span class="tooltip"
-                        >📊
-                        <span class="popup"
-                            >{statsBuffer
-                                .map((s) => s.ram_used_mb.toFixed(1) + "MB")
-                                .join(", ")}</span
+                        <td>{statsMin.cpu_temp_celsius?.toFixed(1) ?? "N/A"}</td
                         >
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td>Temp °C</td>
-                <td>{stats.cpu_temp_celsius?.toFixed(1) ?? "N/A"}</td>
-                <td
-                    >{statsBuffer.some((s) => s.cpu_temp_celsius != null)
-                        ? avg("cpu_temp_celsius").toFixed(1)
-                        : "N/A"}</td
-                >
-                <td>{statsMin.cpu_temp_celsius?.toFixed(1) ?? "N/A"}</td>
-                <td>{statsMax.cpu_temp_celsius?.toFixed(1) ?? "N/A"}</td>
-                <td>
-                    <span class="tooltip"
-                        >📊
-                        <span class="popup"
-                            >{statsBuffer
-                                .map(
-                                    (s) =>
-                                        s.cpu_temp_celsius?.toFixed(1) ?? "N/A",
-                                )
-                                .join(", ")}</span
+                        <td>{statsMax.cpu_temp_celsius?.toFixed(1) ?? "N/A"}</td
                         >
-                    </span>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-{:else}
-    <p>Loading CPU Stats...</p>
-{/if}
+                        <td>
+                            <span class="tooltip"
+                                >📊
+                                <span class="popup">
+                                    {#each statsBuffer as s, idx}
+                                        <span
+                                            class:current={idx ===
+                                                numQueries % bufferSize}
+                                            >{s.cpu_temp_celsius?.toFixed(1) ??
+                                                "N/A"}</span
+                                        >{#if idx < statsBuffer.length - 1}{" | "}
+                                        {/if}
+                                    {/each}
+                                </span>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        {:else}
+            <p>Loading CPU Stats...</p>
+        {/if}
+    </div>
+</div>
 
 <style>
+    table {
+        width: 100%;
+        text-align: left;
+    }
+
+    .panel {
+        width: 100%;
+        border: 2px solid black;
+        border-radius: 5px;
+    }
+
+    .banner {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5em 1em;
+        background: #333;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        font-size: 1em;
+    }
+
+    .banner:hover {
+        background: #444;
+    }
+
+    .arrow {
+        font-size: 0.8em;
+    }
+
+    .panel-content {
+        padding: 1em;
+    }
+
+    .hidden {
+        display: none;
+    }
     .tooltip {
         position: relative;
         cursor: default;
     }
     .tooltip .popup {
-        display: none;
+        display: none; /* back to none — hover rule shows it */
         position: absolute;
         right: 0;
         top: 1.5em;
@@ -177,10 +257,18 @@
         white-space: normal;
         max-width: 500px;
         min-width: 300px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
         z-index: 10;
         font-size: 0.85em;
     }
+
     .tooltip:hover .popup {
         display: block;
+    }
+
+    .current {
+        font-weight: bold;
+        color: yellow;
     }
 </style>

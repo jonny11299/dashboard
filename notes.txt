@@ -6,6 +6,12 @@ For Desktop development, run:
 
 
 
+Current bugs:
+- CPU % is just permanently stuck at "7.9%" -- this can't be the case.
+
+
+
+
   - Why does each document have "+page.svelte" instead of just "page.svelte"?
   - Where do I really edit code?
   - I don't know Rust...
