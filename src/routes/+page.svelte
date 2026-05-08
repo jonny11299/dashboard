@@ -1,6 +1,8 @@
-<script>
+<script lang="ts">
+  import "../app.css";
   import { invoke } from "@tauri-apps/api/core";
-  import Sys from "./sys.svelte";
+  import Sys from "../components/sys.svelte";
+  import Nav from "../components/nav.svelte";
 
   let name = $state("");
   let greetMsg = $state("");
@@ -14,8 +16,7 @@
 </script>
 
 <main class="container">
-  <h1>JB Dashboard</h1>
-
+  <Nav />
   <Sys />
 </main>
 

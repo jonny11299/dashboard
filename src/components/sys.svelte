@@ -2,10 +2,14 @@
     import { onMount, onDestroy } from "svelte";
     import { getSystemStats, type SystemStats } from "$lib/systemStats";
 
+    import CPUGraph from "./CPUGraph.svelte";
+
     import { invoke } from "@tauri-apps/api/core";
 
     // if this is expanded or minimized
     let expanded = $state(true);
+
+    let graphVisible = $state(false);
 
     let stats = $state<SystemStats | null>(null);
     let interval: ReturnType<typeof setInterval>;
@@ -87,6 +91,14 @@
     onDestroy(() => clearInterval(interval));
 </script>
 
+<!-- Moved to Nav
+<div class="theme-buttons">
+    <button onclick={() => themeStore.setTheme("light")}>Light</button>
+    <button onclick={() => themeStore.setTheme("dark")}>Dark</button>
+    <button onclick={() => themeStore.setTheme("system")}>System</button>
+</div>
+-->
+
 <div class="panel">
     <button class="banner" onclick={() => (expanded = !expanded)}>
         <span>System Stats</span>
@@ -98,6 +110,13 @@
             {@const avg = (key: keyof SystemStats) =>
                 statsBuffer.reduce((sum, s) => sum + (s[key] as number), 0) /
                 statsBuffer.length}
+
+            <button onclick={() => (graphVisible = !graphVisible)}
+                >{graphVisible ? "Hide Graph" : "Show Graph"}</button
+            >
+            {#if graphVisible}
+                <CPUGraph />
+            {/if}
 
             <p>
                 {numQueries}
@@ -211,6 +230,7 @@
         width: 100%;
         border: 2px solid black;
         border-radius: 5px;
+        box-sizing: border-box;
     }
 
     .banner {
@@ -270,5 +290,16 @@
     .current {
         font-weight: bold;
         color: yellow;
+    }
+    button {
+        padding: 0.25rem 0.75rem;
+        border: 2px solid var(--border);
+        border-radius: 4px;
+        background: transparent;
+        color: var(--text);
+        cursor: pointer;
+    }
+    button:hover {
+        background: var(--primary-hover);
     }
 </style>
