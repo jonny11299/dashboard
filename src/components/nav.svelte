@@ -17,7 +17,7 @@
 
 <style>
     nav {
-        margin-top: -20px;
+        margin-top: 0px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -28,6 +28,7 @@
     }
 
     .title {
+        margin: 0;
         font-size: 1.25rem;
         font-weight: 600;
         color: var(--color-primary);

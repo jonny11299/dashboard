@@ -9,17 +9,18 @@
     --border: #000000;
     --data-1: #4ade80;
     --data-2: #4acdde;
+    --data-3: #de924a;
 }
 
 /* --- Dark theme overrides --- */
 [data-theme="dark"] {
     --bg: #0f0f10;
-    --surface: #1c1c1e;
+    --surface: #27282c;
     --text: #f0f0f0;
     --text-muted: #cecece;
     --primary: #ffffff;
-    --primary-hover: #cacaca69;
-    --border: #ffffff;
+    --primary-hover: #17223a;
+    --border: #4c4c4c;
 }
 
 /* --- System preference fallback (when theme = "system") --- */
