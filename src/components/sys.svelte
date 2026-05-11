@@ -53,7 +53,7 @@
                         <td>
                             <div class="bar-wrap">
                                 <div
-                                    class="bar"
+                                    class="bar-cpu"
                                     style="width: {cpuStore.stats.cpu_usage_percent.toFixed(
                                         0,
                                     )}%"
@@ -111,7 +111,7 @@
                         <td>
                             <div class="bar-wrap">
                                 <div
-                                    class="bar"
+                                    class="bar-ram"
                                     style="width: {(
                                         (cpuStore.stats.ram_used_mb /
                                             cpuStore.stats.ram_total_mb) *
@@ -155,7 +155,7 @@
                             {#if cpuStore.stats.cpu_temp_celsius != null}
                                 <div class="bar-wrap">
                                     <div
-                                        class="bar"
+                                        class="bar-temp"
                                         style="width: {Math.min(
                                             cpuStore.stats.cpu_temp_celsius,
                                             100,
@@ -295,6 +295,34 @@
         border-radius: 2px 0 0 2px;
         transition: width 0.3s ease;
     }
+    .bar-cpu {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        /* applies transparency to the var color: */
+        background: color-mix(in srgb, var(--data-1) 50%, transparent);
+        border-radius: 2px 0 0 2px;
+        transition: width 0.3s ease;
+    }
+    .bar-ram {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        background: color-mix(in srgb, var(--data-2) 50%, transparent);
+        border-radius: 2px 0 0 2px;
+        transition: width 0.3s ease;
+    }
+    .bar-temp {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        background: color-mix(in srgb, var(--data-3) 50%, transparent);
+        border-radius: 2px 0 0 2px;
+        transition: width 0.3s ease;
+    }
     .bar.warn {
         background: color-mix(
             in srgb,
@@ -318,7 +346,7 @@
     /* Panel — no overflow:hidden so tooltips can escape */
     .panel {
         width: 100%;
-        border: 2px solid var(--border);
+        border: 0px solid var(--border);
         border-radius: 5px;
         box-sizing: border-box;
     }
