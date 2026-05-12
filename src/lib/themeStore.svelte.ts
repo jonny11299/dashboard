@@ -1,7 +1,7 @@
 type Theme = 'light' | 'dark' | 'system';
 
 function createThemeStore() {
-    let theme = $state<Theme>('system');
+    let theme = $state<Theme>('dark');
 
     const isDark = $derived(
         theme === 'dark' ||

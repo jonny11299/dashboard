@@ -12,6 +12,13 @@
     --data-3: #de924a;
 }
 
+[data-theme="light"] {
+    --data-1: hsl(142, 69%, 48%);
+    --data-2: hsl(187, 69%, 48%);
+    --data-3: hsl(29, 69%, 48%);
+
+}
+
 /* --- Dark theme overrides --- */
 [data-theme="dark"] {
     --bg: #0f0f10;
