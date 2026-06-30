@@ -3,6 +3,7 @@
   import { invoke } from "@tauri-apps/api/core";
   import Sys from "../components/sys.svelte";
   import Nav from "../components/nav.svelte";
+  import Footer from "../components/footer.svelte";
 
   let name = $state("");
   let greetMsg = $state("");
@@ -18,6 +19,7 @@
 <main class="container">
   <Nav />
   <Sys />
+  <Footer />
 </main>
 
 <style>
@@ -135,6 +137,40 @@
     }
     button:active {
       background-color: #0f0f0f69;
+    }
+  }
+
+  .footer-tag {
+    position: fixed;
+    bottom: 12px;
+    right: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-size: 0.75rem;
+    line-height: 1.3;
+    color: #888;
+    text-decoration: none;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    z-index: 50;
+  }
+
+  .footer-tag:hover {
+    opacity: 1;
+    color: #535bf2;
+  }
+
+  .footer-tag-sub {
+    font-weight: 500;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .footer-tag {
+      color: #aaa;
+    }
+    .footer-tag:hover {
+      color: #24c8db;
     }
   }
 </style>

@@ -4,7 +4,7 @@
 </script>
 
 <nav>
-    <span class="title"><h1>JB Dashboard</h1></span>
+    <span class="title"><h1>CPU Dashboard</h1></span>
 
     <div class="theme-buttons">
         <button onclick={() => themeStore.setTheme("light")}>Light</button>
