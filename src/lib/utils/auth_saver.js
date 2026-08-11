@@ -46,6 +46,10 @@ export function write(res) {
 	}
 }
 
+function get_ls() {
+	return JSON.parse(localStorage.getItem(LS_STRING) ?? "null");
+}
+
 export function write_from_ls() {
 	try {
 		const data = JSON.parse(localStorage.getItem(LS_STRING) ?? "null");
@@ -74,11 +78,29 @@ export function read() {
 			access_token,
 			token_type,
 			logged_in,
+			expired: false,
 		};
 	} else {
-		console.error(
-			`Trying to read with invalid token data. logged in? ${logged_in}. Token expired? ${Date.now() >= expires_at}`,
-		);
-		return null;
+		if (!logged_in) {
+			const ls = get_ls();
+			if (Date.now() <= ls?.expires_at) {
+				return {
+					expired: true,
+					ls_available: true,
+				};
+			}
+		}
+		if (Date.now() > expires_at) {
+			// case logged_in && token expired
+			return {
+				expired: true,
+				ls_available: false,
+			};
+		} else {
+			console.error(
+				`Trying to read with invalid token data. Token probably expired.\nlogged in? ${logged_in}. Token expired? ${Date.now() >= expires_at}`,
+			);
+			return null;
+		}
 	}
 }
