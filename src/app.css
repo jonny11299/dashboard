@@ -1,75 +1,81 @@
 /* --- Base variables (light theme default) --- */
 :root {
-    --bg: #ffffff;
-    --surface: #f4f4f5;
-    --text: #111111;
-    --text-muted: #525252;
-    --primary: #000000;
-    --primary-hover: #2684925b;
-    --border: #000000;
-    --data-1: #4ade80;
-    --data-2: #4acdde;
-    --data-3: #de924a;
+	--bg: #ffffff;
+	--surface: #f4f4f5;
+	--text: #111111;
+	--text-muted: #525252;
+	--primary: #000000;
+	--primary-hover: #2684925b;
+	--border: #000000;
+	--data-1: #4ade80;
+	--data-2: #4acdde;
+	--data-3: #de924a;
 }
 
 [data-theme="light"] {
-    --data-1: hsl(142, 69%, 48%);
-    --data-2: hsl(187, 69%, 48%);
-    --data-3: hsl(29, 69%, 48%);
-
+	--data-1: hsl(142, 69%, 48%);
+	--data-2: hsl(187, 69%, 48%);
+	--data-3: hsl(29, 69%, 48%);
 }
 
 /* --- Dark theme overrides --- */
 [data-theme="dark"] {
-    --bg: #0f0f10;
-    --surface: #27282c;
-    --text: #f0f0f0;
-    --text-muted: #cecece;
-    --primary: #ffffff;
-    --primary-hover: #17223a;
-    --border: #4c4c4c;
+	--bg: #0f0f10;
+	--surface: #27282c;
+	--text: #f0f0f0;
+	--text-muted: #cecece;
+	--primary: #ffffff;
+	--primary-hover: #17223a;
+	--border: #4c4c4c;
 }
 
 /* --- System preference fallback (when theme = "system") --- */
 @media (prefers-color-scheme: dark) {
-    [data-theme="system"] {
-        --bg: #0f0f10;
-        --surface: #1c1c1e;
-        --text: #f0f0f0;
-        --text-muted: #a0a0a0;
-        --primary: #818cf8;
-        --primary-hover: #6366f1;
-        --border: #2e2e32;
-    }
+	[data-theme="system"] {
+		--bg: #0f0f10;
+		--surface: #1c1c1e;
+		--text: #f0f0f0;
+		--text-muted: #a0a0a0;
+		--primary: #818cf8;
+		--primary-hover: #6366f1;
+		--border: #2e2e32;
+	}
 }
 
 /* --- Global base styles --- */
 body {
-    background-color: var(--bg);
-    color: var(--text);
-    font-family: sans-serif;
-    transition: background-color 0.2s, color 0.2s;
-    /* margin: 2rem;*/
+	background-color: var(--bg);
+	color: var(--text);
+	font-family: sans-serif;
+	transition:
+		background-color 0.2s,
+		color 0.2s;
+	/* margin: 2rem;*/
 }
 
 html,
 body {
-    min-height: 100vh;
-    margin: 0;
+	min-height: 100vh;
+	margin: 0;
 }
 
-
-
 h1 {
-    color: var(--primary);
+	color: var(--primary);
 }
 
 .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    color: var(--text);
+	background: var(--surface);
+	border: 1px solid var(--border);
+	color: var(--text);
 }
 
 p {
-    color: var(--text-muted);
+	color: var(--text-muted);
+}
+
+.panel {
+	width: 100%;
+	border: 0px solid var(--border);
+	border-radius: 5px;
+	box-sizing: border-box;
 }

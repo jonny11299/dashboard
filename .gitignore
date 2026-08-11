@@ -15,3 +15,6 @@ env/
 
 #claude
 .claude/
+
+gmail_secret.json
+gmail-test.html

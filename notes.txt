@@ -6,16 +6,67 @@ For Desktop development, run:
 
 
 
-Current bugs:
-- CPU % is just permanently stuck at "7.9%" -- this can't be the case.
+- make it pull from localStorage when it's not past expiry, and require re-auth only when it's time to do that
+
+- parse the returned object
 
 
 
 
-  - Why does each document have "+page.svelte" instead of just "page.svelte"?
-  - Where do I really edit code?
-  - I don't know Rust...
-  -   What does this do?    // CPU Usage: average across all logical cores
-        let cpu_usage = sys.cpus().iter().map(|c| c.cpu_usage()).sum::<f32>() 
-        / sys.cpus().len() as f32;
-        // i might actually not want this
+
+
+
+
+
+
+
+
+TO BUILD WITH CARRYING OVER GMAIL OAUTH:
+
+Good news — there's a plugin that does exactly this without you having to hand-write the Rust server: tauri-plugin-oauth.
+
+It's a minimalistic Rust library and Tauri plugin for handling browser-based OAuth flows in desktop applications — it spawns a temporary localhost server to capture OAuth redirects, solving the challenge of using OAuth with desktop apps, since many OAuth providers like Google and GitHub don't allow custom URI schemes as redirect URLs. This is exactly the loopback-flow problem you're hitting, and it's built specifically so you don't need to know Rust to use it.
+Lib.rs
+Lib.rs
+
+How simple it actually is:
+
+Rust side (src-tauri/src/main.rs) — mostly boilerplate, minimal code of your own:
+
+rust
+use tauri_plugin_oauth::start;
+
+#[tauri::command]
+async fn start_server(window: tauri::Window) -> Result<u16, String> {
+    start(move |url| {
+        let _ = window.emit("oauth-url", url);
+    })
+    .map_err(|err| err.to_string())
+}
+
+Frontend side (your existing JS/TS):
+
+js
+import { start, onUrl } from '@fabianlars/tauri-plugin-oauth';
+
+const port = await start(); // spins up a real localhost server, returns the port
+// build your Google OAuth URL using redirect_uri = `http://localhost:${port}`
+
+await onUrl((url) => {
+  // this fires once Google redirects back — parse the auth code out of `url`
+});
+
+That port becomes your redirect URI dynamically — no hardcoding, no config drift between dev and bundled builds, and it works identically whether you're running tauri dev or the final packaged .app.
+
+Setup:
+
+bash
+cargo add tauri-plugin-oauth
+npm install @fabianlars/tauri-plugin-oauth
+
+Then register it in main.rs like any other Tauri plugin (.plugin(tauri_plugin_oauth::init())).
+
+One important note from the plugin's own docs: because of the unprotected localhost port, you must verify the URL you receive — since anything on your machine could theoretically hit that port while it's briefly open, so don't blindly trust the payload; check it looks like a real Google redirect before using it.
+crates.io
+
+This is genuinely the path of least resistance for a bundleable app — it's a few lines of glue code rather than a hand-rolled HTTP server, and it removes the "must always run via npm run tauri dev" constraint entirely. Want help wiring the actual Google auth URL construction and code-exchange logic around this?

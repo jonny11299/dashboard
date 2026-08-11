@@ -49,9 +49,9 @@ fn get_system_stats(state: tauri::State<AppState>) -> SystemStats {
 
 
     // Small note:
-    // used_memory() / 1024 / 1024 produces MiB, not MB. 
-    // Field name ram_used_mb is technically off by ~5% at the gigabyte scale. 
-    // Cosmetic, but if a user ever cross-checks against Task Manager / Activity Monitor, 
+    // used_memory() / 1024 / 1024 produces MiB, not MB.
+    // Field name ram_used_mb is technically off by ~5% at the gigabyte scale.
+    // Cosmetic, but if a user ever cross-checks against Task Manager / Activity Monitor,
     // they'll see a small discrepancy.
     let cpu_usage = sys.cpus().iter().map(|c| c.cpu_usage()).sum::<f32>()
         / sys.cpus().len() as f32;
@@ -136,6 +136,7 @@ pub fn run() {
             components: Mutex::new(components),
         })
         .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_oauth::init())
         .invoke_handler(tauri::generate_handler![greet, get_system_stats, list_components])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
