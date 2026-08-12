@@ -2,9 +2,9 @@
 	import Collapsable from "$lib/components/Collapsable.svelte";
 	import { onMount } from "svelte";
 
-	const fields = ["Job Title", "Date Added", "Deadline", "Action", "Link", "Status", "Contact"];
-	const ENTRIES_STORAGE = "dashboard_entries_apsofidgnp9283h";
-	const DELETED_ENTRIES_STORAGE = "dashboard_deleted_entries_apsofidgnp9283h";
+	const fields = ["Title", "Link", "Additional Info"];
+	const ENTRIES_STORAGE = "dashboard_links_apsofidgnp9283h";
+	const DELETED_ENTRIES_STORAGE = "dashboard_deleted_links_apsofidgnp9283h";
 	let curEntry = $state([]);
 	let entries = $state([]);
 	let deletedEntries = $state([]);
@@ -30,18 +30,22 @@
 		}
 	}
 
+	function normalizeUrl(raw) {
+		const t = raw.trim();
+		if (!t) return "";
+		if (/^[a-z][a-z0-9+.-]*:\/\//i.test(t) || t.startsWith("mailto:")) return t;
+		return `https://${t}`;
+	}
+
 	function submitTodo() {
 		const newEntry = { id: Date.now() };
 		for (let f of fields) {
-			const ta = document.getElementById(`entry_${f}`);
-			const t = ta.value;
-			// console.log(t);
+			const ta = document.getElementById(`link_${f}`);
+			newEntry[f] = f === "Link" ? normalizeUrl(ta.value) : ta.value.trim();
 			ta.value = "";
-			newEntry[f] = t;
 		}
-		console.log(newEntry);
-		entries.push(newEntry);
 
+		entries.push(newEntry);
 		saveEntries();
 	}
 
@@ -77,7 +81,7 @@
 	});
 </script>
 
-<Collapsable title="Follow Up">
+<Collapsable title="Links">
 	<div class="chart">
 		{#each fields as f}
 			<h3 class="chartTitle">{f}</h3>
@@ -85,22 +89,29 @@
 		<h3 class="chartTitle">*</h3>
 		<!-- Do it yourself:  -->
 		{#each fields as f}
-			<textarea type="text" id={`entry_${f}`}></textarea>
+			<textarea type="text" id={`link_${f}`}></textarea>
 		{/each}
 		<button onclick={() => submitTodo()}>+</button>
 	</div>
 	<div class="chart">
 		{#each entries as e (e.id)}
 			{#each fields as f}
-				<p class="entry">
-					{e[f]}
-				</p>
+				{#if f == "Link"}
+					<a class="link" href={e[f]} target="_blank">
+						{e[f]}
+					</a>
+				{:else}
+					<p class="entry">
+						{e[f]}
+					</p>
+				{/if}
 			{/each}
 			<button class="delete" onclick={() => deleteEntry(e.id)}>x</button>
 		{:else}
 			<p>No entries yet</p>
 		{/each}
 	</div>
+	<!--
 	<button style="align-self: center" onclick={() => (showDeletedEntries = !showDeletedEntries)}
 		>{showDeletedEntries ? "hide deleted entries" : "show deleted entries"}</button
 	>
@@ -122,6 +133,7 @@
 			{/each}
 		</div>
 	{/if}
+	 -->
 </Collapsable>
 
 <style>
@@ -168,7 +180,7 @@
 
 	.chart {
 		display: grid;
-		grid-template-columns: 1fr 1fr 1fr 1fr 1fr 3fr 1fr 0.5fr;
+		grid-template-columns: 1fr 2fr 1fr 0.2fr;
 		align-items: stretch;
 	}
 	.chartTitle {
@@ -186,5 +198,17 @@
 		margin: 0;
 		padding: 0.4rem 0.5rem;
 		color: var(--text);
+	}
+
+	.link {
+		display: block;
+		overflow-wrap: anywhere;
+		min-height: 1.5em;
+		text-decoration: underline;
+		border-bottom: 1px solid var(--border);
+		border-inline: 1px solid var(--border);
+		margin: 0;
+		padding: 0.4rem 0.5rem;
+		color: var(--accent);
 	}
 </style>

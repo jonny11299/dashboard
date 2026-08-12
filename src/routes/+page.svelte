@@ -6,6 +6,7 @@
 	import Footer from "$lib/components/Footer.svelte";
 	import Email from "$lib/components/Email.svelte";
 	import FollowUp from "$lib/components/FollowUp.svelte";
+	import Links from "$lib/components/Links.svelte";
 
 	let name = $state("");
 	let greetMsg = $state("");
@@ -22,6 +23,7 @@
 	<Nav />
 	<Email />
 	<FollowUp />
+	<Links />
 	<Sys />
 	<!--
 	<Footer />
