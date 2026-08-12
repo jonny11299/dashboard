@@ -27,6 +27,7 @@
 	--primary: #ffffff;
 	--primary-hover: #17223a;
 	--border: #4c4c4c;
+	--border-strong: #8c8c8c;
 }
 
 /* --- System preference fallback (when theme = "system") --- */

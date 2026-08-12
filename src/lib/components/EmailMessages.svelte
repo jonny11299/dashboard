@@ -1,7 +1,7 @@
 <script>
 	import { SvelteSet } from "svelte/reactivity";
 
-	let { messages = [] } = $props();
+	let { messages = [], unreadOnly = false } = $props();
 
 	const dtf = new Intl.DateTimeFormat(undefined, {
 		dateStyle: "medium",
@@ -80,6 +80,7 @@
 					html: bodies.html,
 					received: date ? dtf.format(date) : "",
 					iso: date ? date.toISOString() : undefined,
+					unread: m?.labelIds.includes("UNREAD"),
 				};
 			}),
 	);
@@ -88,7 +89,7 @@
 <div class="container">
 	{#each formatted as m (m.id)}
 		{@const expanded = open.has(m.id)}
-		<article class="message" class:expanded>
+		<article class="message" class:expanded class:hide={unreadOnly && !m?.unread}>
 			<button
 				type="button"
 				class="summary"
@@ -100,8 +101,8 @@
 					<!-- From -->
 					{#if m.from}
 						<span class="field from">
-							<span class="label">From</span>
-							<span class="value" class:highlight1={true}>{m.from}</span>
+							<span class="label" class:highlight1={m?.unread}>From</span>
+							<span class="value" class:highlight1={m?.unread}>{m.from}</span>
 							<span class="value" class:muted={true}>{m.returnPath}</span>
 						</span>
 					{/if}
@@ -109,8 +110,10 @@
 					<!-- Subject -->
 					{#if m.subject}
 						<span class="field subject">
-							<span class="label">Subject</span>
-							<span class="value" class:highlight2={true}>{m.subject}</span>
+							<span class="label" class:highlight2={m?.unread}>Subject</span>
+							<span class="value" class:highlight2={m?.unread} class:muted={!m?.unread}
+								>{m.subject}</span
+							>
 							<!-- Date received -->
 							{#if m.received}
 								<time class="received" datetime={m.iso}>| {m.received}</time>
@@ -186,17 +189,20 @@
 	.container {
 		width: auto;
 		height: auto;
-		border: 2px solid var(--text);
+		border: 2px solid var(--border-strong);
 	}
 	.message {
 		display: flex;
 		flex-direction: column;
 		gap: 0rem;
 		padding: 0.75rem;
-		margin-bottom: 0.5rem;
-		margin-top: 0.5rem;
-		padding-top: 0.3rem;
-		border-bottom: 2px solid var(--border);
+		border-bottom: 2px solid var(--border-strong);
+	}
+	.message:hover {
+		background-color: var(--surface);
+	}
+	.hide {
+		display: none;
 	}
 	.summary {
 		display: flex;

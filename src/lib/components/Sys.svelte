@@ -4,7 +4,7 @@
 	import { type SystemStats } from "$lib/systemStats";
 	import CPUGraph from "$lib/components/CPUGraph.svelte";
 
-	let expanded = $state(true);
+	let expanded = $state(false);
 	let graphVisible = $state(false);
 
 	onMount(() => cpuStore.start());

@@ -3,7 +3,7 @@
 	import { cpuStore } from "$lib/cpuStore.svelte";
 	import { type SystemStats } from "$lib/systemStats";
 
-	let expanded = $state(true);
+	let expanded = $state(false);
 	let { title, children } = $props();
 
 	onMount(() => cpuStore.start());

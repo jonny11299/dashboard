@@ -7,12 +7,31 @@
 
 	let loggedIn = $state(false);
 	let messages = $state([]);
+	let loaded = $state(false);
+	let unreadOnly = $state(true);
+	function toggleUnreadFilter() {
+		unreadOnly = !unreadOnly;
+	}
+
+	let numUnread = $derived.by(() => {
+		const ms = messages;
+		let i = 0;
+		for (let m of ms) {
+			if (m?.labelIds.includes("UNREAD")) i++;
+		}
+		return i;
+	});
 
 	const DEFAULT_MSG_AMOUNT = 40;
 
 	onMount(() => {
 		log_me_in();
 	});
+
+	function setNumUnread(data) {
+		console.log("Setting num unread");
+		console.log(data);
+	}
 
 	async function log_me_in() {
 		// attempt a read
@@ -53,8 +72,8 @@
 
 		if (data?.logged_in) {
 			const res = await listInbox(data.access_token);
-			console.log("Gotchur inbox!!");
-			// console.log(res);
+			// console.log("Gotchur inbox!!");
+			console.log(res);
 			const msgs = [];
 			for (let o of res) {
 				const m = await gmailFetch(`messages/${o.id}`, data.access_token);
@@ -62,6 +81,7 @@
 				msgs.push(m);
 			}
 			messages = msgs;
+			loaded = true;
 		} else {
 			console.log("auth_saver doesn't think we're logged in. Bailing inbox summary.");
 		}
@@ -103,12 +123,15 @@
 	}
 </script>
 
-<Collapsable title="Email">
+<Collapsable title={loaded ? `Email (${numUnread} unread)` : `Email (loading...)`}>
 	<button onclick={() => log_me_in()}>Attempt Login</button>
 	{#if loggedIn}
 		<button onclick={() => getInboxSummary()}>Get inbox</button>
+		<button onclick={() => toggleUnreadFilter()}
+			>{unreadOnly ? "Include All" : "Unread Only"}</button
+		>
 	{/if}
-	<EmailMessages {messages}></EmailMessages>
+	<EmailMessages {messages} {unreadOnly}></EmailMessages>
 </Collapsable>
 
 <style>
