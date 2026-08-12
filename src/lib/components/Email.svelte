@@ -136,19 +136,25 @@
 
 <style>
 	button {
-		margin-bottom: 1rem;
-		border: 2px solid var(--data-1);
-		border-radius: 2rem;
-		padding: 0.5rem;
-		background-color: var(--bg);
+		margin: 0 0.5rem 1rem 0;
+		border: 2px solid var(--accent);
+		border-radius: var(--border-radius);
+		padding: 0.5rem 1rem;
+		background-color: transparent;
 		color: var(--text);
+		font-family: var(--font-sans);
 		font-size: 1rem;
+		cursor: pointer;
+		transition:
+			border-color var(--transition-time) ease,
+			background-color var(--transition-time) ease,
+			scale 0.1s ease;
 	}
 	button:hover {
-		border: 2px solid var(--data-2);
-		cursor: pointer;
+		border-color: var(--data-2);
+		background: color-mix(in srgb, var(--data-1) 12%, transparent);
 	}
 	button:active {
-		scale: 0.8;
+		scale: 0.92;
 	}
 </style>

@@ -1,18 +1,18 @@
 <script>
 	// @ts-ignore
-	import { themeStore } from "$lib/themeStore.svelte";
+	import { themeStore, THEMES } from "$lib/themeStore.svelte";
 </script>
 
 <nav>
 	<span class="title"><h1>CPU Dashboard</h1></span>
 
 	<div class="theme-buttons">
-		<button onclick={() => themeStore.setTheme("light")}>Light</button>
-		<button onclick={() => themeStore.setTheme("dark")}>Dark</button>
-		<button onclick={() => themeStore.setTheme("system")}>System</button>
+		{#each THEMES as t}
+			<button class:active={themeStore.theme === t} onclick={() => themeStore.setTheme(t)}>
+				{t}
+			</button>
+		{/each}
 	</div>
-
-	<p>Current: {themeStore.theme}</p>
 
 	<button onclick={() => location.reload()}>Reload</button>
 </nav>
@@ -23,35 +23,51 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding: 0rem 2rem;
-		background: var(--color-bg);
-		border-bottom: 2px solid var(--color-border);
+		flex-wrap: wrap;
+		gap: 0.75rem 1.5rem;
+		padding: 0.75rem 1.5rem;
+		background: var(--surface);
+		border-bottom: 2px solid var(--border-strong);
 		border-radius: 0px;
 	}
 
-	.title {
+	.title h1 {
 		margin: 0;
-		font-size: 1.25rem;
+		font-size: 1.5rem;
 		font-weight: 600;
-		color: var(--color-primary);
+		color: var(--primary);
 	}
 
 	.theme-buttons {
 		display: flex;
-		gap: 0.5rem;
+		flex-wrap: wrap;
+		gap: 0.4rem;
 	}
 
 	button {
-		padding: 0.25rem 0.75rem;
-		border: 2px solid var(--color-border);
-		border-radius: 4px;
+		padding: 0.3rem 0.8rem;
+		border: var(--border-width) solid var(--border);
+		border-radius: var(--border-radius);
 		background: transparent;
-		color: var(--color-text);
+		color: var(--text);
+		font-family: var(--font-sans);
+		font-size: 0.85rem;
+		text-transform: capitalize;
 		cursor: pointer;
+		transition:
+			border-color var(--transition-time) ease,
+			color var(--transition-time) ease,
+			background-color var(--transition-time) ease;
 	}
 
 	button:hover {
-		border-color: var(--color-primary-hover);
-		color: var(--color-primary-hover);
+		border-color: var(--primary-hover);
+		color: var(--primary-hover);
+	}
+
+	button.active {
+		border-color: var(--primary);
+		color: var(--bg);
+		background: var(--primary);
 	}
 </style>

@@ -189,14 +189,19 @@
 	.container {
 		width: auto;
 		height: auto;
-		border: 2px solid var(--border-strong);
+		border: var(--border-width) solid var(--border-strong);
+		border-radius: var(--border-radius);
+		overflow: hidden;
 	}
 	.message {
 		display: flex;
 		flex-direction: column;
 		gap: 0rem;
-		padding: 0.75rem;
-		border-bottom: 2px solid var(--border-strong);
+		padding: 0.75rem 1rem;
+		border-bottom: var(--border-width) solid var(--border);
+	}
+	.message:last-child {
+		border-bottom: none;
 	}
 	.message:hover {
 		background-color: var(--surface);
@@ -218,7 +223,7 @@
 		cursor: pointer;
 	}
 	.summary:focus-visible {
-		outline: 2px solid var(--data-1);
+		outline: 2px solid var(--primary);
 		outline-offset: 2px;
 	}
 	.headers {
@@ -339,9 +344,9 @@
 	}
 
 	.highlight1 {
-		color: var(--data-1);
+		color: var(--primary);
 	}
 	.highlight2 {
-		color: var(--data-2);
+		color: var(--secondary);
 	}
 </style>

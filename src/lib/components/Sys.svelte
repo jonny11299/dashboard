@@ -199,11 +199,11 @@
 		transition: background 0.15s;
 	}
 	tbody tr:hover {
-		background: var(--primary-hover);
+		background: color-mix(in srgb, var(--primary) 12%, transparent);
 	}
 	tbody td {
 		padding: 0.55em 0.8em;
-		font-family: "JetBrains Mono", "Fira Code", monospace;
+		font-family: var(--font-mono);
 		color: var(--text);
 	}
 	tbody td:first-child {
@@ -294,22 +294,28 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding: 0.5em 1em;
-		background: var(--primary-hover);
+		gap: 1rem;
+		padding: 0.75rem 1.25rem;
+		background: var(--surface);
 		color: var(--text);
 		border: none;
+		border-bottom: var(--border-width) solid var(--border-strong);
 		cursor: pointer;
-		font-size: 1em;
+		font-family: var(--font-sans);
+		font-size: 1.05rem;
+		font-weight: 600;
+		text-align: left;
+		transition: background-color var(--transition-time) ease;
 	}
 	.banner:hover {
-		background: var(--primary-hover);
-		filter: brightness(1.15);
+		background: color-mix(in srgb, var(--primary) 12%, var(--surface));
 	}
 	.arrow {
-		font-size: 0.8em;
+		font-size: 0.75em;
+		color: var(--primary);
 	}
 	.panel-content {
-		padding: 1em;
+		padding: 1.25rem;
 	}
 	.hidden {
 		display: none;
@@ -346,15 +352,20 @@
 	}
 
 	button {
-		padding: 0.25rem 0.75rem;
-		border: 2px solid var(--border);
-		border-radius: 4px;
+		padding: 0.3rem 0.8rem;
+		border: var(--border-width) solid var(--border);
+		border-radius: var(--border-radius);
 		background: transparent;
 		color: var(--text);
+		font-family: var(--font-sans);
 		cursor: pointer;
+		transition:
+			border-color var(--transition-time) ease,
+			background-color var(--transition-time) ease;
 	}
 	button:hover {
-		background: var(--primary-hover);
+		border-color: var(--primary-hover);
+		background: color-mix(in srgb, var(--primary) 12%, transparent);
 	}
 
 	.banner-meta {

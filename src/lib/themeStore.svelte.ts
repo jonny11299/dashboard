@@ -1,4 +1,23 @@
-type Theme = 'light' | 'dark' | 'system';
+type Theme =
+    | 'light'
+    | 'dark'
+    | 'system'
+    | 'grey'
+    | 'blue-glass'
+    | 'notebook'
+    | 'grid'
+    | 'frutiger';
+
+export const THEMES: Theme[] = [
+    'light',
+    'dark',
+    'system',
+    'grey',
+    'blue-glass',
+    'notebook',
+    'grid',
+    'frutiger'
+];
 
 function createThemeStore() {
     let theme = $state<Theme>('dark');

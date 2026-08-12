@@ -1,57 +1,327 @@
-/* --- Base variables (light theme default) --- */
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Play:wght@400;700&family=Electrolize&display=swap");
+
+/* --- Base variables (light-ish default) --- */
 :root {
-	--bg: #ffffff;
-	--surface: #f4f4f5;
-	--text: #111111;
+	--bg: #fefeff;
+	--surface: #edeef1;
+	--divider: #8a8a8a;
+	--text: #161616;
+	--text-key: #d854df;
 	--text-muted: #525252;
-	--primary: #000000;
-	--primary-hover: #2684925b;
-	--border: #000000;
+	--text-hint: #6b7280;
+	--text-warn: #730000;
+	--primary: #1573ff;
+	--primary-hover: #35bbff;
+	--secondary: #41ad89;
+	--accent: #d854df;
+	--border: rgba(0, 0, 0, 0.35);
+	--border-width: 1px;
+	--padding: 1.5rem;
+
+	--divider-size: 0.4rem;
+	letter-spacing: 0.01em;
+
+	--font-sans: "Quicksand", sans-serif;
+	--font-mono: "IBM Plex Mono", monospace;
+	--font-scale: 1;
+	--font-weight: 400;
+
+	--transition-time: 0.3s;
+
+	--border-radius: 1rem;
+
+	/* --- App-specific derived tokens --- */
+	--border-strong: var(--divider);
+
+	/* Graph series (CPU / Memory / Heat). These keep the original app's
+	   green / cyan / orange identity; each theme nudges them for contrast but
+	   stays within chroma.distance (Lab) <= 80 of these originals.
+	   Originals: --data-1 #4ade80, --data-2 #4acdde, --data-3 #de924a.
+	   Bright originals here also serve dark + system. */
 	--data-1: #4ade80;
 	--data-2: #4acdde;
 	--data-3: #de924a;
+
+	/* Semantic alert colors — tuned to read on both light and dark grounds. */
+	--warning: #e0912b;
+	--danger: #e05252;
 }
 
+/* --- Light --- */
 [data-theme="light"] {
-	--data-1: hsl(142, 69%, 28%);
-	--data-2: hsl(187, 69%, 28%);
-	--data-3: hsl(29, 69%, 28%);
+	background-image:
+		/* hairline grid */
+		repeating-linear-gradient(to right, rgba(22, 22, 22, 0.028) 0 0px, transparent 0px 88px),
+		repeating-linear-gradient(to bottom, rgba(22, 22, 22, 0.028) 0 0px, transparent 0px 88px),
+		/* accent blooms */
+		radial-gradient(ellipse 65% 50% at 8% 4%, rgba(21, 115, 255, 0.09), transparent 88%),
+		radial-gradient(ellipse 55% 45% at 94% 22%, rgba(216, 84, 223, 0.07), transparent 88%),
+		radial-gradient(ellipse 70% 50% at 72% 96%, rgba(65, 173, 137, 0.08), transparent 88%),
+		/* base — cool at top, warm at bottom */
+		linear-gradient(168deg, #ffffff 0%, #fdfdff 50%, #f7f8fb 100%);
+	background-size:
+		88px 88px,
+		88px 88px,
+		cover,
+		cover,
+		cover,
+		cover;
+	background-attachment: fixed;
+
+	--surface: #fefefe;
+
+	/* darkened for contrast on white (Lab dist to originals: 40 / 36 / 35) */
+	--data-1: hsl(142, 89%, 38%);
+	--data-2: hsl(187, 89%, 38%);
+	--data-3: hsl(29, 99%, 48%);
 }
 
-/* --- Dark theme overrides --- */
+/* --- Dark --- */
 [data-theme="dark"] {
-	--bg: #0f0f10;
-	--surface: #27282c;
-	--text: #f0f0f0;
-	--text-muted: #cecece;
-	--primary: #ffffff;
-	--primary-hover: #17223a;
+	--bg: #0f0f0f;
+	--surface: #2a2a2d;
+	--divider: #4c4c4c;
+	--text: #d3d3d3;
+	--text-muted: #ababab;
+	--text-hint: #8c8c8c;
+	--text-warn: #fd9999;
+	--primary: #009075;
+	--primary-hover: #53acd6;
+	--secondary: #c8cbff;
+	--accent: #61b554;
 	--border: #4c4c4c;
 	--border-strong: #8c8c8c;
+
+	--border-width: 1px;
+	--border-radius: 8px;
+
+	--warning: #f5a623;
+	--danger: #fd6d6d;
 }
 
-/* --- System preference fallback (when theme = "system") --- */
+/* --- System: inherit dark palette when the OS prefers dark --- */
 @media (prefers-color-scheme: dark) {
 	[data-theme="system"] {
-		--bg: #0f0f10;
-		--surface: #1c1c1e;
-		--text: #f0f0f0;
-		--text-muted: #a0a0a0;
-		--primary: #818cf8;
-		--primary-hover: #6366f1;
-		--border: #2e2e32;
+		--bg: #0f0f0f;
+		--surface: #2a2a2d;
+		--divider: #4c4c4c;
+		--text: #d3d3d3;
+		--text-muted: #ababab;
+		--text-hint: #8c8c8c;
+		--text-warn: #fd9999;
+		--primary: #009075;
+		--primary-hover: #53acd6;
+		--secondary: #c8cbff;
+		--accent: #61b554;
+		--border: #4c4c4c;
+		--border-strong: #8c8c8c;
+		--border-radius: 8px;
+
+		--warning: #f5a623;
+		--danger: #fd6d6d;
 	}
 }
 
+/* --- Greyscale (neutral chrome; palette is the only chroma) --- */
+[data-theme="grey"] {
+	--bg: #bcbcbc;
+	--surface: #a8a8a8;
+	--divider: #8a8a8a;
+	--text: #161616;
+	--text-muted: #3a3a3a;
+	--text-hint: #4a4a4a;
+	--text-warn: #500000;
+	--primary: #1f1f1f;
+	--primary-hover: #005c62;
+	--secondary: #2f4f4f;
+	--accent: #005c62;
+	--border: #1f1f1f;
+	--border-strong: #1f1f1f;
+	--border-radius: 6px;
+
+	/* muted to sit on mid-grey (Lab dist: 34 / 21 / 18) */
+	--data-1: #2f8f56;
+	--data-2: #2f93a3;
+	--data-3: #a86a2f;
+}
+
+/* --- Blue Glass --- */
+[data-theme="blue-glass"] {
+	background-image:
+		/* mullions — vertical */
+		repeating-linear-gradient(to right, rgba(255, 255, 255, 0.06) 0 1px, transparent 1px 160px),
+		/* mullions — horizontal */
+		repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 0 1px, transparent 1px 160px),
+		/* sheen along the top of each pane */
+		repeating-linear-gradient(
+				to bottom,
+				rgba(255, 255, 255, 0.035) 0 2px,
+				rgba(255, 255, 255, 0.012) 2px 34px,
+				transparent 34px 120px
+			),
+		/* light shafts */
+		linear-gradient(
+				105deg,
+				transparent 0 5%,
+				rgba(255, 255, 255, 0.05) 12% 19%,
+				transparent 21% 44%,
+				rgba(255, 255, 255, 0.035) 46% 51%,
+				transparent 53% 78%,
+				rgba(255, 255, 255, 0.028) 80% 84%,
+				transparent 86%
+			),
+		/* blooms */
+		radial-gradient(ellipse 60% 45% at 18% 12%, rgba(91, 229, 212, 0.16), transparent 70%),
+		radial-gradient(ellipse 55% 45% at 86% 78%, rgba(13, 191, 251, 0.13), transparent 70%),
+		/* base */ linear-gradient(160deg, #16233f 0%, #0f172a 45%, #0a1120 100%);
+	background-size:
+		120px 120px,
+		120px 120px,
+		120px 120px,
+		cover,
+		cover,
+		cover,
+		cover;
+	background-attachment: fixed;
+
+	--bg: #0f172a;
+	--surface: rgba(206, 213, 222, 0.2);
+
+	--text: #ced5de;
+	--text-muted: rgba(206, 213, 222, 0.78);
+	--text-hint: rgba(206, 213, 222, 0.68);
+	--text-warn: #ff9d9d;
+
+	--primary: #41cc94;
+	--primary-hover: #0dbffb;
+	--secondary: #5be5d4;
+	--accent: #72819b;
+
+	--border: rgba(255, 255, 255, 0.1);
+	--border-strong: rgba(255, 255, 255, 0.28);
+	--border-width: 2px;
+	--border-radius: 9px;
+
+	--font-sans: "Play", sans-serif;
+	--font-mono: "Electrolize", monospace;
+	--font-scale: 1.05;
+
+	--warning: #ffcf6a;
+	--danger: #ff8080;
+
+	/* nudged toward the theme's teal/cyan (Lab dist: 16 / 2 / 10) */
+	--data-1: #4ce0a0;
+	--data-2: #4ad2e6;
+	--data-3: #e0a24a;
+}
+
+/* --- Notebook --- */
+[data-theme="notebook"] {
+	--bg: #e1d7cb;
+	--surface: #ece6e2;
+
+	--text: #292929;
+	--text-muted: rgba(41, 41, 41, 0.78);
+	--text-hint: rgba(41, 41, 41, 0.68);
+	--text-key: #518cc2;
+	--text-warn: #730000;
+
+	--primary: #56a186;
+	--primary-hover: #518cc2;
+	--secondary: #625997;
+	--accent: #9b3b1f;
+	--border: rgba(41, 41, 41, 0.5);
+	--border-strong: rgba(41, 41, 41, 0.78);
+
+	--border-width: 1px;
+	--border-radius: 5px;
+
+	--font-mono: "IBM Plex Mono", monospace;
+	--font-weight: 500;
+	--font-scale: 1;
+
+	/* darkened for warm paper (Lab dist: 32 / 15 / 10) */
+	--data-1: #3f9e6a;
+	--data-2: #3fa6b8;
+	--data-3: #c47a3a;
+}
+
+/* --- Grid --- */
+[data-theme="grid"] {
+	--bg: #22272a;
+	--surface: #3e4147;
+
+	--text: #fcf5ea;
+	--text-muted: rgba(252, 245, 234, 0.78);
+	--text-hint: rgba(252, 245, 234, 0.68);
+
+	--text-key: #429f55;
+	--text-warn: #3091ba;
+
+	--primary: #0dbffb;
+	--primary-hover: #d77423;
+	--secondary: #bda9ff;
+	--accent: #5c51b6;
+	--border: rgba(252, 245, 234, 0.28);
+	--border-strong: rgba(252, 245, 234, 0.5);
+
+	--border-width: 1px;
+	--border-radius: 2px;
+
+	--font-sans: "Play", sans-serif;
+
+	--warning: #e0912b;
+	--danger: #ff7070;
+
+	/* bright originals; d2 nudged toward theme cyan (Lab dist: 0 / 10 / 0) */
+	--data-1: #4ade80;
+	--data-2: #4ac8ea;
+	--data-3: #de924a;
+}
+
+/* --- Frutiger --- */
+[data-theme="frutiger"] {
+	background-image: linear-gradient(170deg, #1d7ba8 0%, #12628f 40%, #0a4a72 70%, #06375a 100%);
+	background-attachment: fixed;
+	background-size: cover;
+
+	--bg: #0a4a72;
+	--surface: rgba(255, 255, 255, 0.12);
+
+	--text: #ffffff;
+	--text-muted: rgba(244, 252, 255, 0.92);
+	--text-hint: rgba(244, 252, 255, 0.76);
+	--text-key: #b8f2a6;
+	--text-warn: #ffc98a;
+
+	--primary: #fce9b3;
+	--primary-hover: #c4fbd4;
+	--secondary: #a9dcff;
+	--accent: #dcf58a;
+
+	--border: rgba(255, 255, 255, 0.4);
+	--border-strong: rgba(255, 255, 255, 0.6);
+	--border-width: 1px;
+	--border-radius: 12px;
+	--divider: rgba(255, 255, 255, 0.4);
+
+	--font-sans: "Play", sans-serif;
+	--font-mono: "Quicksand", sans-serif;
+	--font-scale: 1.05;
+
+	--warning: #ffd98a;
+	--danger: #ff9d9d;
+
+	/* lightened to read on the watery blue ground (Lab dist: 15 / 9 / 12) */
+	--data-1: #7cea9e;
+	--data-2: #7fdcea;
+	--data-3: #ecac6a;
+}
+
 /* --- Global base styles --- */
-body {
+html {
 	background-color: var(--bg);
-	color: var(--text);
-	font-family: sans-serif;
-	transition:
-		background-color 0.2s,
-		color 0.2s;
-	/* margin: 2rem;*/
+	font-size: calc(1rem * var(--font-scale));
 }
 
 html,
@@ -60,23 +330,139 @@ body {
 	margin: 0;
 }
 
-h1 {
-	color: var(--primary);
+body {
+	/* transparent so themed background-images on <html> show through */
+	background-color: transparent;
+	color: var(--text);
+	font-family: var(--font-sans);
+	font-weight: var(--font-weight);
+	transition: color 0.2s;
 }
 
-.card {
-	background: var(--surface);
-	border: 1px solid var(--border);
-	color: var(--text);
+a,
+p,
+span,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: var(--font-sans);
+}
+
+h1 {
+	color: var(--primary);
 }
 
 p {
 	color: var(--text-muted);
 }
 
+img,
+svg,
+video,
+canvas {
+	max-width: 100%;
+	height: auto;
+}
+
+.card {
+	background: var(--surface);
+	border: var(--border-width) solid var(--border);
+	border-radius: var(--border-radius);
+	color: var(--text);
+
+	[data-theme="light"] & {
+		box-shadow: 2px 3px;
+	}
+	[data-theme="frutiger"] & {
+		background-image: linear-gradient(
+			to bottom,
+			rgba(255, 255, 255, 0.32) 0%,
+			rgba(255, 255, 255, 0.18) 25%,
+			rgba(255, 255, 255, 0.04) 70%,
+			rgba(255, 255, 255, 0.14) 100%
+		);
+		box-shadow:
+			inset 0 1px 0 rgba(255, 255, 255, 0.7),
+			0 2px 8px rgba(0, 40, 70, 0.35);
+		backdrop-filter: blur(10px) saturate(1.4);
+	}
+}
+
 .panel {
 	width: 100%;
-	border: 0px solid var(--border);
-	border-radius: 5px;
+	border: var(--border-width) solid var(--border);
+	border-radius: var(--border-radius);
 	box-sizing: border-box;
+	overflow: hidden;
+}
+
+/* --- Links --- */
+a {
+	color: var(--secondary);
+	font-weight: 700;
+	transition:
+		color var(--transition-time) ease,
+		border-color var(--transition-time) ease,
+		background-color var(--transition-time) ease;
+}
+a:hover {
+	text-decoration: underline;
+	cursor: pointer;
+	color: var(--primary-hover);
+}
+
+/* --- Form controls (base; components may override) --- */
+input,
+textarea,
+select {
+	min-width: 0;
+	background-color: var(--bg);
+	border: var(--border-width) solid var(--border);
+	border-radius: var(--border-radius);
+	padding: 0.6rem 0.85rem;
+	margin: 0.25rem 0;
+
+	color: var(--text);
+	font-family: inherit;
+	font-size: 1rem;
+	line-height: 1.4;
+
+	box-sizing: border-box;
+	transition:
+		border-color var(--transition-time) ease,
+		background-color var(--transition-time) ease,
+		box-shadow var(--transition-time) ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+	color: var(--text-hint, var(--text-muted));
+	opacity: 1;
+}
+
+input:hover,
+textarea:hover {
+	border-color: var(--primary-hover);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+	outline: none;
+	border-color: var(--primary);
+	box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 35%, transparent);
+}
+
+input:disabled,
+textarea:disabled {
+	opacity: 0.55;
+	cursor: not-allowed;
+}
+
+button {
+	border: 2px solid var(--accent);
 }
