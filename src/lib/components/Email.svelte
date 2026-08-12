@@ -8,6 +8,8 @@
 	let loggedIn = $state(false);
 	let messages = $state([]);
 
+	const DEFAULT_MSG_AMOUNT = 40;
+
 	onMount(() => {
 		log_me_in();
 	});
@@ -26,7 +28,7 @@
 		} else {
 			const res = await login();
 			console.log("Logged in, here's info:");
-			console.log(res);
+			// console.log(res);
 			const write_success = write(res);
 			if (write_success) {
 				console.log("Successfully saved token data");
@@ -34,6 +36,10 @@
 			} else {
 				loggedIn = false;
 			}
+		}
+
+		if (loggedIn) {
+			await getInboxSummary();
 		}
 	}
 
@@ -48,11 +54,11 @@
 		if (data?.logged_in) {
 			const res = await listInbox(data.access_token);
 			console.log("Gotchur inbox!!");
-			console.log(res);
+			// console.log(res);
 			const msgs = [];
 			for (let o of res) {
 				const m = await gmailFetch(`messages/${o.id}`, data.access_token);
-				console.log(m);
+				// console.log(m);
 				msgs.push(m);
 			}
 			messages = msgs;
@@ -72,7 +78,7 @@
 	}
 
 	// IDs of recent inbox messages
-	export async function listInbox(token, max = 7) {
+	export async function listInbox(token, max = DEFAULT_MSG_AMOUNT) {
 		const { messages = [] } = await gmailFetch("messages", token, {
 			maxResults: max,
 			q: "in:inbox", // full Gmail search syntax works here
@@ -106,4 +112,20 @@
 </Collapsable>
 
 <style>
+	button {
+		margin-bottom: 1rem;
+		border: 2px solid var(--data-1);
+		border-radius: 2rem;
+		padding: 0.5rem;
+		background-color: var(--bg);
+		color: var(--text);
+		font-size: 1rem;
+	}
+	button:hover {
+		border: 2px solid var(--data-2);
+		cursor: pointer;
+	}
+	button:active {
+		scale: 0.8;
+	}
 </style>

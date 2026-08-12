@@ -13,9 +13,9 @@
 }
 
 [data-theme="light"] {
-	--data-1: hsl(142, 69%, 48%);
-	--data-2: hsl(187, 69%, 48%);
-	--data-3: hsl(29, 69%, 48%);
+	--data-1: hsl(142, 69%, 28%);
+	--data-2: hsl(187, 69%, 28%);
+	--data-3: hsl(29, 69%, 28%);
 }
 
 /* --- Dark theme overrides --- */
