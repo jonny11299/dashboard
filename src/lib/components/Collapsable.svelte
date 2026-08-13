@@ -1,16 +1,6 @@
 <script lang="ts">
-	import { onMount, onDestroy } from "svelte";
-	import { cpuStore } from "$lib/cpuStore.svelte";
-	import { type SystemStats } from "$lib/systemStats";
-
 	let expanded = $state(false);
 	let { title, children } = $props();
-
-	onMount(() => cpuStore.start());
-	onDestroy(() => cpuStore.stop());
-
-	const avg = (key: keyof SystemStats) =>
-		cpuStore.buffer.reduce((sum, s) => sum + (s[key] as number), 0) / cpuStore.buffer.length;
 </script>
 
 <div class="panel">

@@ -45,6 +45,7 @@
 			ta.value = "";
 		}
 
+		entries.sort((a, b) => b.id - a.id);
 		entries.push(newEntry);
 		saveEntries();
 	}

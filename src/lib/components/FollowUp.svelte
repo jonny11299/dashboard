@@ -42,6 +42,7 @@
 		console.log(newEntry);
 		entries.push(newEntry);
 
+		entries.sort((a, b) => b.id - a.id);
 		saveEntries();
 	}
 
@@ -92,9 +93,15 @@
 	<div class="chart">
 		{#each entries as e (e.id)}
 			{#each fields as f}
-				<p class="entry">
-					{e[f]}
-				</p>
+				{#if f == "Link"}
+					<a class="link" href={e[f]} target="_blank">
+						{e[f].substr(e[f].indexOf("://") + 3, 20)}
+					</a>
+				{:else}
+					<p class="entry">
+						{e[f]}
+					</p>
+				{/if}
 			{/each}
 			<button class="delete" onclick={() => deleteEntry(e.id)}>x</button>
 		{:else}
@@ -168,7 +175,7 @@
 
 	.chart {
 		display: grid;
-		grid-template-columns: 1fr 1fr 1fr 1fr 1fr 3fr 1fr 0.5fr;
+		grid-template-columns: 1.5fr 1fr 1fr 1fr 2fr 2fr 1fr 0.5fr;
 		align-items: stretch;
 	}
 	.chartTitle {
@@ -186,5 +193,17 @@
 		margin: 0;
 		padding: 0.4rem 0.5rem;
 		color: var(--text);
+	}
+
+	.link {
+		display: block;
+		overflow-wrap: anywhere;
+		min-height: 1.5em;
+		text-decoration: underline;
+		border-bottom: 1px solid var(--border);
+		border-inline: 1px solid var(--border);
+		margin: 0;
+		padding: 0.4rem 0.5rem;
+		color: var(--accent);
 	}
 </style>
