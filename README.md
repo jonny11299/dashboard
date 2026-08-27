@@ -8,8 +8,11 @@ It stores this information in a 100-frame buffer, to prevent excess memory usage
 
 
 # To run:
+
 download 'dmg/dashboard_0.1.0_x64.dmg'
+
 install like a typical mac app
+
 double-click and run.
 
 
