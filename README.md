@@ -14,7 +14,7 @@ double-click and run.
 
 
 
-Download
+# To develop:
 
 cd into the folder
 
