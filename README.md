@@ -16,6 +16,14 @@ install like a typical mac app
 double-click and run.
 
 
+# Gallery:
+
+![First Image](assets/p1.png)
+
+![Second Image](assets/p2.png)
+
+![Final Image](assets/p3.png)
+
 
 # To develop:
 
