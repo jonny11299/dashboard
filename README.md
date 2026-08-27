@@ -34,7 +34,7 @@ cd into the folder
 'npm run tauri dev'
 
 
-You may need to install Rust, specifically if you get an error message like 'failed to run "cargo metadata" command to get workspace directory ... No such file or directory
+You may need to install Rust, specifically if you get an error message like 'failed to run "cargo metadata" command to get workspace directory ... No such file or directory'
 
 in that case, install Rust via:
 
