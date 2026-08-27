@@ -1,6 +1,7 @@
 <script>
 	// @ts-ignore
 	import { themeStore, THEMES } from "$lib/themeStore.svelte";
+	import { onMount } from "svelte";
 </script>
 
 <nav>

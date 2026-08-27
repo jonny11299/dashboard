@@ -7,7 +7,11 @@
 	let expanded = $state(true);
 	let graphVisible = $state(false);
 
-	onMount(() => cpuStore.start());
+	onMount(() => {
+		setTimeout(() => {
+			cpuStore.start();
+		}, 100);
+	});
 	onDestroy(() => cpuStore.stop());
 
 	const avg = (key: keyof SystemStats) =>
