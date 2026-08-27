@@ -4,7 +4,7 @@
 	import { type SystemStats } from "$lib/systemStats";
 	import CPUGraph from "$lib/components/CPUGraph.svelte";
 
-	let expanded = $state(false);
+	let expanded = $state(true);
 	let graphVisible = $state(false);
 
 	onMount(() => cpuStore.start());
@@ -15,10 +15,12 @@
 </script>
 
 <div class="panel">
+	<!--
 	<button class="banner" onclick={() => (expanded = !expanded)}>
 		<span>System Stats</span>
 		<span class="arrow">{expanded ? "▲" : "▼"}</span>
 	</button>
+	 -->
 
 	<div class="panel-content" class:hidden={!expanded}>
 		{#if cpuStore.stats}
@@ -41,7 +43,7 @@
 						<th>Avg</th>
 						<th>Min</th>
 						<th>Max</th>
-						<th>Full?</th>
+						<th>Buffer</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -183,6 +185,8 @@
 		width: 100%;
 		border-collapse: collapse;
 		font-size: 0.9em;
+		margin-top: 4rem;
+		border: none;
 	}
 	thead th {
 		color: var(--text-muted, var(--text));

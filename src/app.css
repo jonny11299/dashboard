@@ -394,7 +394,8 @@ canvas {
 
 .panel {
 	width: 100%;
-	border: var(--border-width) solid var(--border);
+	/* border: var(--border-width) solid var(--border); */
+	border: none;
 	border-radius: var(--border-radius);
 	box-sizing: border-box;
 	overflow: hidden;

@@ -1,12 +1,9 @@
 <script lang="ts">
 	import "../app.css";
 	import { invoke } from "@tauri-apps/api/core";
-	import Sys from "$lib/components/Sys.svelte";
 	import Nav from "$lib/components/Nav.svelte";
+	import Sys from "$lib/components/Sys.svelte";
 	import Footer from "$lib/components/Footer.svelte";
-	import Email from "$lib/components/Email.svelte";
-	import FollowUp from "$lib/components/FollowUp.svelte";
-	import Links from "$lib/components/Links.svelte";
 
 	let name = $state("");
 	let greetMsg = $state("");
@@ -21,12 +18,14 @@
 
 <main class="container">
 	<Nav />
+	<Sys />
+	<Footer />
+
+	<!--
+	removed, exist in the branch "widgets"
 	<Email />
 	<FollowUp />
 	<Links />
-	<Sys />
-	<!--
-	<Footer />
 	-->
 </main>
 

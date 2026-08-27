@@ -13,8 +13,8 @@
 		"windows": [
 			{
 				"title": "dashboard",
-				"width": 1475,
-				"height": 873
+				"width": 1080,
+				"height": 780
 			}
 		],
 		"security": {
